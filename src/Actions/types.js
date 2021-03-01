@@ -1,1 +1,2 @@
 export const GET_CHALLENGES = "GET_CHALLENGES"
+export const CHANGE_CONTEST = "CHANGE_CONTEST"

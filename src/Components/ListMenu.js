@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
 import { normalize } from '../Helper/Helper';
 
 const ListMenu = (props) => {
+
     const { data } = props;
-    console.log(data)
+    console.log(data, "check playe")
 
     const [state, setState] = useState({})
     useEffect(() => {
         setState(data)
-    }, [])
+    }, [data])
 
-    function _renderItem({ item }) {
+    function _renderItem({ item, index }) {
         return (
-            <TouchableOpacity style={styles.listItem} onPress={() => setState({ ...state, selected: item })} activeOpacity={0.9}>
+            <TouchableOpacity
+                key={index}
+                style={styles.listItem}
+                onPress={() => props.selectGame(item)}
+                activeOpacity={0.8}>
                 <Text style={styles.itemText}>{item}</Text>
             </TouchableOpacity>
         )
@@ -22,17 +28,16 @@ const ListMenu = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.title}>
-                <Text style={{ ...styles.itemText, marginStart: 0, fontSize: normalize(16) }}>{state.title}</Text>
+                <Text style={{ ...styles.itemText, marginStart: 0, fontSize: normalize(16) }}>{state?.title}</Text>
                 <Image source={require("../Assets/down.png")} style={styles.down} />
             </View>
-            {/* {state.items?.map((item) => {
-                return (
-                    
-                )
-            })} */}
             <FlatList
                 data={state ? state.items : []}
                 renderItem={_renderItem}
+                keyExtractor={item => item.key}
+                ListHeaderComponent={() => (<View style={styles.line} />)}
+                ListFooterComponent={() => (<View style={styles.line} />)}
+                ItemSeparatorComponent={() => (<View style={styles.line} />)}
             />
 
         </View>
@@ -46,6 +51,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: normalize(15)
     },
     container: {
         paddingVertical: normalize(15)
@@ -61,11 +67,8 @@ const styles = StyleSheet.create({
     },
     listItem: {
         flexDirection: 'row',
-        justifyContent: 'flex-start',
-        marginTop: normalize(20),
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
-        borderColor: '#fff'
+        justifyContent: 'center',
+        marginVertical: normalize(10),
     },
     itemText: {
         marginStart: normalize(15),
@@ -81,5 +84,10 @@ const styles = StyleSheet.create({
         height: normalize(14),
         backgroundColor: '#fff',
         borderRadius: 30
+    },
+    line: {
+        width: '100%',
+        height: 1,
+        backgroundColor: '#ccc'
     }
 });
